@@ -1,6 +1,6 @@
 import heroimg from './heroimg.png'
 import logofooter from './logo-footer.png'
-import logofooteralt from './logo-footer-2.jpg'
+import logofooteralt from './logo-footer-2.png'
 import logonav from './logo-nav.png'
 import logonavalt from './logo-nav-2.png'
 import flyer1 from './flyer1.jpg'

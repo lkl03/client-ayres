@@ -10,9 +10,14 @@ import { GiGasStove, GiPaintBucket } from 'react-icons/gi';
 import { TbAirConditioning } from 'react-icons/tb';
 import ContactFormOverlay from "../components/ContactFormOverlay";
 
+import useWindowSize from "../hooks/useWindowSize";
+
 const Home = () => {
 
-  const [tiles, setTiles] = useState([false, false, false, false, false]);
+  const size = useWindowSize();
+  const isMobile = size.width <= 768; // You can choose the breakpoint according to your needs
+
+  const [tiles, setTiles] = useState([false, false, false, false, false, false]);
 
   const changeTile = (index, value) => {
     const newTiles = [...tiles];
@@ -20,6 +25,32 @@ const Home = () => {
     setTiles(newTiles);
   };
 
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const services = [
+    {icon: <MdOutlineWaterDrop />, name: 'Plomería', description: 'Ofrecemos servicios de plomería de alta calidad.'},
+    {icon: <GiPaintBucket />, name: 'Durlock y Albañilería', description: 'Nuestros profesionales proporcionan servicios de durlock y albañilería de confianza.'},
+    {icon: <MdOutlineCarpenter />, name: 'Carpintería', description: 'Realizamos todo tipo de trabajos de carpintería.'},
+    {icon: <MdFormatPaint />, name: 'Pintura', description: 'Ofrecemos servicios de pintura para interiores y exteriores.'},
+    {icon: <FaBath />, name: 'Sanitarios', description: 'Proporcionamos instalación y reparación de sanitarios.'},
+    {icon: <GiGasStove />, name: 'Gas', description: 'Nuestro equipo está capacitado para manejar todas sus necesidades de gas.'},
+    {icon: <TbAirConditioning />, name: 'Aires Acondicionados', description: 'Brindamos servicios de instalación y mantenimiento de aires acondicionados.'},
+    {icon: <MdElectricBolt />, name: 'Electricidad', description: 'Ofrecemos una variedad de servicios eléctricos, incluyendo instalaciones y reparaciones.'},
+    {icon: <MdLightbulb />, name: 'Iluminación', description: 'Proporcionamos servicios de iluminación, incluyendo instalación y diseño.'},
+  ];
+
+  const handleInteractionStart = (index) => {
+    setSelectedItem(index);
+  };
+
+  const handleInteractionEnd = () => {
+    setSelectedItem(null);
+  };
+
+  const handleTouch = (index) => {
+    setSelectedItem(selectedItem !== index ? index : null);
+  };
+  
   return (
     <div className="min-h-screen flex flex-col bg-cover bg-center md:bg-fixed" style={{ backgroundImage: `url(${heroimg.src})` }}>
       <Head>
@@ -48,17 +79,16 @@ const Home = () => {
             <div className="flex flex-col sm:flex-row justify-center items-center">
               <div className="md:w-2/5 md:mr-4 mb-8 md:mb-0">
                 <div className="flex flex-col flex-wrap gap-5">
-                {['Quiénes Somos', 'Abonos Mensuales', 'Nuestros Servicios', 'Redes', 'Obras y Clientes'].map((label, index) => (
+                {['Quiénes Somos', 'Abonos Mensuales', 'Nuestros Servicios', 'Redes', 'Obras y Clientes', 'Contactanos'].map((label, index) => (
                   <button
                     key={index}
-                    onMouseEnter={() => changeTile(index, true)}
-                    onMouseLeave={() => changeTile(index, false)}
+                    onClick={() => changeTile(index, !tiles[index])} // toggle the tile on click
                     className="gradient-background text-white py-4 px-4 rounded-s-md rounded-e-xl hover:shadow-[8px_0px_8px_rgba(255,255,255,0.1)] focus:shadow-[8px_0px_8px_rgba(255,255,255,0.1)] focus:outline-none hover:bg-[#3683DC] focus:bg-[#3683DC] font-bold uppercase sm:text-xl transition-all ease-in-out"
                   >
                     {label}
                   </button>
                 ))}
-                <ContactFormOverlay />
+                {/*<ContactFormOverlay />*/}
                 <button className="gradient-background text-white py-4 px-4 rounded-s-md rounded-e-xl hover:shadow-[8px_0px_8px_rgba(255,255,255,0.1)] focus:shadow-[8px_0px_8px_rgba(255,255,255,0.1)] focus:outline-none hover:bg-[#3683DC] focus:bg-[#3683DC] font-bold uppercase sm:text-xl transition-all ease-in-out">
                   Cotizador Online
                 </button>
@@ -94,36 +124,87 @@ const Home = () => {
                   : ''
                 }
                 {tiles[2] ? 
-                  <div className="border-[#0022ff85] bg-[#0022ff85] border-2 py-4 px-4 rounded-md text-white shadow-[8px_0px_8px_rgba(0,0,0,0.25)]">
+                  <div className="bg-[#0022ff35] py-4 px-4 rounded-md">
                     <p className="sm:text-lg text-base text-center">
                       <span className="font-bold text-white uppercase">Nuestros Servicios</span>
-                      <ul className="mt-4">
-                        <li className="flex flex-row flex-wrap gap-1 font-bold"><span className="text-3xl text-white"><MdOutlineWaterDrop /></span>Plomería</li>
-                        <li className="flex flex-row flex-wrap gap-1 font-bold"><span className="text-3xl text-white"><GiPaintBucket /></span>Durlock y Albañilería</li>
-                        <li className="flex flex-row flex-wrap gap-1 font-bold"><span className="text-3xl text-white"><MdOutlineCarpenter /></span>Carpintería</li>
-                        <li className="flex flex-row flex-wrap gap-1 font-bold"><span className="text-3xl text-white"><MdFormatPaint /></span>Pintura</li>
-                        <li className="flex flex-row flex-wrap gap-1 font-bold"><span className="text-3xl text-white"><FaBath /></span>Sanitarios</li>
-                        <li className="flex flex-row flex-wrap gap-1 font-bold"><span className="text-3xl text-white"><GiGasStove /></span>Gas</li>
-                        <li className="flex flex-row flex-wrap gap-1 font-bold"><span className="text-3xl text-white"><TbAirConditioning /></span>Aires Acondicionados</li>
-                        <li className="flex flex-row flex-wrap gap-1 font-bold"><span className="text-3xl text-white"><MdElectricBolt /></span>Electricidad</li>
-                        <li className="flex flex-row flex-wrap gap-1 font-bold"><span className="text-3xl text-white"><MdLightbulb /></span>Iluminación</li>
+                      <ul className="mt-4 mb-2 flex flex-col flex-wrap gap-y-2">
+                        {services.map((service, index) => (
+                          <li
+                            key={index}
+                            onMouseEnter={isMobile ? null : () => handleInteractionStart(index)}
+                            onMouseLeave={isMobile ? null : handleInteractionEnd}
+                            onTouchEnd={isMobile ? () => handleTouch(index) : null}
+                            className="cursor-pointer border-[#0022ff85] bg-[#0022ff85] border-2 py-2 px-4 rounded-md text-white shadow-[8px_0px_8px_rgba(0,0,0,0.25)] flex flex-row flex-wrap gap-1 font-bold"
+                          >
+                            <span className="text-3xl text-white">{service.icon}</span>{service.name}
+                            <div style={{
+                              opacity: selectedItem === index ? 1 : 0,
+                              maxHeight: selectedItem === index ? '100px' : '0',
+                              overflow: 'hidden',
+                              transition: 'opacity 0.3s ease-in-out, max-height 0.3s ease-in-out',
+                              pointerEvents: 'none'
+                            }}
+                              className="text-base font-normal text-start">
+                              {service.description}
+                            </div>
+                          </li>
+                        ))}
                       </ul>
-                      Y muchos más!
+                      <span className="font-bold text-white">Y muchos más!</span>
                     </p>
                   </div>
-                  
+
                   : ''
                 }
-                {tiles[3] ? 
+                {tiles[3] ?
                   <div className="border-white bg-white border-2 py-4 px-4 rounded-md text-black shadow-[8px_0px_8px_rgba(0,0,0,0.25)]">
-                  <InstagramEmbed url="https://www.instagram.com/p/CrLEgJ5uMTq/?utm_source=ig_web_copy_link" width="100%" />
-                  </div> 
-                  
+                    <InstagramEmbed url="https://www.instagram.com/p/CrLEgJ5uMTq/?utm_source=ig_web_copy_link" width="100%" />
+                  </div>
+
                   : ''
                 }
-                {tiles[4] ? 
-                  'text5' 
-                  
+                {tiles[4] ?
+                  'text5'
+
+                  : ''
+                }
+                {tiles[5] ?
+                  <div className="rounded-lg w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center">
+                    <form className="bg-white p-8 rounded-lg w-full max-w-screen-md mx-auto">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input
+                          type="text"
+                          name="name"
+                          placeholder="Nombre y apellido"
+                          className="px-4 py-2 border border-gray-300 rounded-lg col-span-full focus:outline-[#0022ff]"
+                        />
+                        <input
+                          type="text"
+                          name="phone"
+                          placeholder="Teléfono"
+                          className="px-4 py-2 border border-gray-300 rounded-lg col-span-full focus:outline-[#0022ff]"
+                        />
+                        <input
+                          type="email"
+                          name="email"
+                          placeholder="Email"
+                          className="px-4 py-2 border border-gray-300 rounded-lg col-span-full focus:outline-[#0022ff]"
+                        />
+                      </div>
+                      <textarea
+                        name="message"
+                        placeholder="Mensaje"
+                        className="px-4 py-2 border border-gray-300 rounded-lg w-full mt-4 h-40 focus:outline-[#0022ff]"
+                      />
+                      <button
+                        type="submit"
+                        className="bg-[#0022ff] hover:bg-[#3683DC] text-white font-bold uppercase py-4 px-4 rounded-lg w-full mt-4 transition-all ease-in-out"
+                      >
+                        Enviar
+                      </button>
+                    </form>
+                  </div>
+
                   : ''
                 }
               </div>
