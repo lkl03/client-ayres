@@ -1,18 +1,29 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Head from "next/head";
 import { InstagramEmbed } from 'react-social-media-embed';
 
-import { heroimg, logofooter, logofooteralt, logonav, logonavalt, flyer1, flyer2, publi1, publi2, publi3, publi4 } from "../assets";
+import { heroimg, logofooter, logofooteralt, flyer1, flyer2, publi1, publi2, publi3, publi4 } from "../assets";
 
 import { FaWhatsapp, FaEnvelope, FaMapMarkerAlt, FaBath } from 'react-icons/fa';
 import { MdElectricBolt, MdOutlineWaterDrop, MdFormatPaint, MdOutlineCarpenter, MdLightbulb } from 'react-icons/md';
 import { GiGasStove, GiPaintBucket } from 'react-icons/gi';
 import { TbAirConditioning } from 'react-icons/tb';
 import ContactFormOverlay from "../components/ContactFormOverlay";
+import Navbar from "../components/Navbar";
 
 import useWindowSize from "../hooks/useWindowSize";
 
 const Home = () => {
+
+  const [images, setImages] = useState([{src:publi1.src}, {src:publi2.src}, {src:publi3.src}, {src:publi4.src}]);
+  const alternateImages = [{src:logofooteralt.src}, {src:flyer2.src}, {src:heroimg.src}, {src:logofooter.src}];
+
+  useEffect(() => {
+      const timer = setInterval(() => {
+          setImages(oldImages => oldImages[0].src === publi1.src ? alternateImages : [{src:publi1.src}, {src:publi2.src}, {src:publi3.src}, {src:publi4.src}]);
+      }, 3000);
+      return () => clearInterval(timer);
+  }, []);
 
   const size = useWindowSize();
   const isMobile = size.width <= 768; // You can choose the breakpoint according to your needs
@@ -59,27 +70,20 @@ const Home = () => {
       </Head>
 
       {/* Navbar */}
-      <nav className="bg-[#3683DC75] text-black p-4 flex items-center justify-between">
-        <div className="flex items-center">
-          <img src={logonav.src} alt="Logo" className="md:w-[250px] w-[175px] h-auto md:ml-10" />
-        </div>
-        <div className="flex items-center">
-          <img src={logonavalt.src} alt="Logo alternativo" className="md:w-[100px] w-[60px] h-auto md:mr-10" />
-        </div>
-      </nav>
+      <Navbar />
 
       <a href="https://api.whatsapp.com/send?phone=5492644051652" target="_blank" rel="noopener noreferrer" class="fixed bottom-4 left-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full flex flex-wrap gap-1 items-center justify-center">
         <span className="text-3xl"><FaWhatsapp/></span> <span className="sm:block hidden">Escribinos por WhatsApp</span>
       </a>
 
       {/* Hero */}
-      <div className="flex-1">
+      <div className="flex-1 md:mt-0 mt-[4.7rem]">
         <div className="bg-[#3683DC75] w-full md:h-screen md:py-0 py-10 flex items-center justify-center">
           <div className="w-full max-w-6xl px-4">
             <div className="flex flex-col sm:flex-row justify-center items-center">
               <div className="md:w-2/5 md:mr-4 mb-8 md:mb-0">
                 <div className="flex flex-col flex-wrap gap-5">
-                {['Quiénes Somos', 'Abonos Mensuales', 'Nuestros Servicios', 'Redes', 'Obras y Clientes', 'Contactanos'].map((label, index) => (
+                {['Quiénes Somos', 'Abonos Mensuales', 'Nuestros Servicios', 'Redes', 'Obras y Clientes'].map((label, index) => (
                   <button
                     key={index}
                     onClick={() => changeTile(index, !tiles[index])} // toggle the tile on click
@@ -89,6 +93,12 @@ const Home = () => {
                   </button>
                 ))}
                 {/*<ContactFormOverlay />*/}
+                <button 
+                  className="gradient-background text-white py-4 px-4 rounded-s-md rounded-e-xl hover:shadow-[8px_0px_8px_rgba(255,255,255,0.1)] focus:shadow-[8px_0px_8px_rgba(255,255,255,0.1)] focus:outline-none hover:bg-[#3683DC] focus:bg-[#3683DC] font-bold uppercase sm:text-xl transition-all ease-in-out"
+                  onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
+                >
+                  Contactanos
+                </button>
                 <button className="gradient-background text-white py-4 px-4 rounded-s-md rounded-e-xl hover:shadow-[8px_0px_8px_rgba(255,255,255,0.1)] focus:shadow-[8px_0px_8px_rgba(255,255,255,0.1)] focus:outline-none hover:bg-[#3683DC] focus:bg-[#3683DC] font-bold uppercase sm:text-xl transition-all ease-in-out">
                   Cotizador Online
                 </button>
@@ -98,12 +108,11 @@ const Home = () => {
                 {tiles.some(tile => tile === true) ? (
                   null
                 ) : 
-                <div className="flex flex-wrap gap-2 items-center justify-center">
-                <img src={publi1.src} alt="Publicidad 1" className="sm:w-[175px] w-[125px] h-auto rounded-md" />
-                <img src={publi2.src} alt="Publicidad 2" className="sm:w-[175px] w-[125px] h-auto rounded-md" />
-                <img src={publi3.src} alt="Publicidad 3" className="sm:w-[175px] w-[125px] h-auto rounded-md" />
-                <img src={publi4.src} alt="Publicidad 4" className="sm:w-[175px] w-[125px] h-auto rounded-md" />
-                </div>
+                <div className="flex flex-col items-center justify-center gap-2">
+                    {images.map((image, index) => (
+                      <img key={index} src={image.src} alt={`Publicidad ${index + 1}`} className="sm:w-[200px] w-[125px] h-auto max-h-[75px] rounded-md" />
+                    ))}
+                  </div>
                 }
                 {tiles[0] ?
                   <div className="border-[#0022ff85] bg-[#0022ff85] border-2 py-4 px-4 rounded-md text-white shadow-[8px_0px_8px_rgba(0,0,0,0.25)]">
@@ -168,7 +177,7 @@ const Home = () => {
 
                   : ''
                 }
-                {tiles[5] ?
+                {/*{tiles[5] ?
                   <div className="rounded-lg w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center">
                     <form className="bg-white p-8 rounded-lg w-full max-w-screen-md mx-auto">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -206,7 +215,7 @@ const Home = () => {
                   </div>
 
                   : ''
-                }
+                }*/}
               </div>
             </div>
             <p className="text-md sm:text-lg md:text-xl mb-4 text-center text-white uppercase font-medium mt-4">
@@ -216,7 +225,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Footer */}
+      {/* Footer 
       <footer className="bg-[#3683DC75] text-white p-4 flex flex-col md:flex-row items-center justify-between">
         <div className="flex flex-col md:flex-row gap-5 items-center md:ml-[25%] md:mb-0 mb-8">
           <a href="https://api.whatsapp.com/send?phone=5492644051652" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-[#0022ff] text-sm sm:text-base flex items-center gap-1 font-medium transition-all ease-in-out"><span className="text-[#00bb2d] text-2xl"><FaWhatsapp /></span> 2644051652</a>
@@ -225,6 +234,58 @@ const Home = () => {
           <a href="https://goo.gl/maps/sqX2QbMQgvzsqF646" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-[#0022ff] text-sm sm:text-base sm:text-start text-center flex items-center gap-1 font-medium transition-all ease-in-out"><span className="text-[#0022FF] text-2xl"><FaMapMarkerAlt /></span> Oficina: Calle Entre Ríos 859 Sur – Capital – San Juan</a>
         </div>
         <img src={logofooteralt.src} alt="Logo" className="w-[180px] h-auto" />
+      </footer>*/}
+      {/* Footer*/} 
+      <footer className="bg-white text-black pt-20 p-4">
+        <h3 className="text-center text-[#0022ff] md:text-[2.5rem] text-[2rem] font-semibold mb-4">Contactanos</h3>
+        <div className="rounded-lg w-full h-full flex items-center justify-center mb-8">
+          <form className="bg-white p-8 rounded-lg border-2 border-[#0022ff] w-full max-w-screen-md mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                name="name"
+                placeholder="Nombre y apellido"
+                className="px-4 py-2 border border-gray-300 rounded-lg col-span-full focus:outline-[#0022ff]"
+              />
+              <input
+                type="text"
+                name="phone"
+                placeholder="Teléfono"
+                className="px-4 py-2 border border-gray-300 rounded-lg col-span-full focus:outline-[#0022ff]"
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                className="px-4 py-2 border border-gray-300 rounded-lg col-span-full focus:outline-[#0022ff]"
+              />
+            </div>
+            <textarea
+              name="message"
+              placeholder="Mensaje"
+              className="px-4 py-2 border border-gray-300 rounded-lg w-full mt-4 h-40 focus:outline-[#0022ff]"
+            />
+            <button
+              type="submit"
+              className="bg-[#0022ff] hover:bg-[#3683DC] text-white font-bold uppercase py-4 px-4 rounded-lg w-full mt-4 transition-all ease-in-out"
+            >
+              Enviar
+            </button>
+          </form>
+        </div>
+        <div>
+          <div className="flex flex-col gap-4 items-center justify-between m-auto w-full">
+            <div className="flex flex-col md:flex-row gap-4 items-center mx-auto md:mb-0">
+              <a href="https://api.whatsapp.com/send?phone=5492644051652" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-[#0022ff] text-sm sm:text-base flex items-center gap-1 font-medium transition-all ease-in-out"><span className="text-[#00bb2d] text-2xl"><FaWhatsapp /></span> 2644051652</a>
+              <a href="https://api.whatsapp.com/send?phone=5492645215000" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-[#0022ff] text-sm sm:text-base flex items-center gap-1 font-medium transition-all ease-in-out"><span className="text-[#00bb2d] text-2xl"><FaWhatsapp /></span> 2645215000</a>
+              <a href="mailto:infoaires.sas@gmail.com" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-[#0022ff] text-sm sm:text-base flex items-center gap-1 font-medium transition-all ease-in-out"><span className="text-red-500 text-2xl" ><FaEnvelope /></span> infoaires.sas@gmail.com</a>
+            </div>
+            <a href="https://goo.gl/maps/sqX2QbMQgvzsqF646" target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-[#0022ff] text-sm sm:text-base sm:text-start text-center flex items-center gap-1 font-medium transition-all ease-in-out"><span className="text-[#0022FF] text-2xl"><FaMapMarkerAlt /></span> Oficina: Calle Entre Ríos 859 Sur – Capital – San Juan</a>
+          </div>
+          <div className="flex flex-wrap w-full items-center justify-end mt-10">
+            <img src={logofooteralt.src} alt="Logo" className="w-[180px] h-auto" />
+          </div>
+        </div>
       </footer>
     </div>
   );
