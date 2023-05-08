@@ -255,8 +255,14 @@ const Home = () => {
   return (
     <div className="min-h-screen flex flex-col bg-cover bg-center md:bg-fixed" style={{ backgroundImage: `url(${heroimg.src})` }}>
       <Head>
-        <title>My Website</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Ayres</title>
+        <link rel="icon" href="/icon.ico" />
+        <meta charSet="UTF-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Servicios y materiales de construcción en San Juan" />
+        <meta name="keywords" content="Construcción, corralón, San Juan, materiales, cotización, presupuesto" />
+        <meta name="theme-color" content="#151515" />
       </Head>
 
       
@@ -264,7 +270,7 @@ const Home = () => {
 
 
       {whatsappButton.map((label, index) => (
-        <a href={`https://api.whatsapp.com/send?phone=549${label}`} target="_blank" rel="noopener noreferrer" class="fixed bottom-4 left-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full flex flex-wrap gap-1 items-center justify-center">
+        <a key={index} href={`https://api.whatsapp.com/send?phone=549${label}`} target="_blank" rel="noopener noreferrer" class="fixed bottom-4 left-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full flex flex-wrap gap-1 items-center justify-center">
           <span className="text-3xl"><FaWhatsapp/></span> <span className="sm:block hidden">Escribinos por WhatsApp</span>
         </a>
       ))}
@@ -311,8 +317,8 @@ const Home = () => {
                 }
                 {tiles[0] ?
                   <div className="border-[#0022ff85] bg-[#0022ff85] border-2 py-4 px-4 rounded-md text-white shadow-[8px_0px_8px_rgba(0,0,0,0.25)]">
-                    {quienesSomosText.map((label) => (
-                      <p className="sm:text-lg text-base text-start">
+                    {quienesSomosText.map((label, index) => (
+                      <p key={index} className="sm:text-lg text-base text-start">
                       {label}
                       </p>
                     ))}
@@ -321,8 +327,8 @@ const Home = () => {
                 }
                 {tiles[1] ?
                   <div className="border-white bg-white border-2 py-4 px-4 rounded-md text-white shadow-[8px_0px_8px_rgba(0,0,0,0.25)]">
-                  {abonosImage.map((label) => (
-                    <img src={label.src} alt="flyer" className="w-full h-auto pointer-events-none" />
+                  {abonosImage.map((label, index) => (
+                    <img key={index} src={label.src} alt="flyer" className="w-full h-auto pointer-events-none" />
                   ))}
                   </div>
 
@@ -363,8 +369,8 @@ const Home = () => {
                 }
                 {tiles[3] ?
                   <div className="border-white bg-white border-2 py-4 px-4 rounded-md text-black shadow-[8px_0px_8px_rgba(0,0,0,0.25)]">
-                  {instagram.map((label) => (
-                    <InstagramEmbed url={label} width="100%" />
+                  {instagram.map((label, index) => (
+                    <InstagramEmbed key={index} url={label} width="100%" />
                     ))}
                   </div>
 
@@ -417,7 +423,7 @@ const Home = () => {
               </div>
             </div>
             {desc.map((label, index) => (
-              <p className="text-md sm:text-lg md:text-xl mb-4 text-center text-white uppercase font-medium mt-4">
+              <p key={index} className="text-md sm:text-lg md:text-xl mb-4 text-center text-white uppercase font-medium mt-4">
                 {label}
             </p>
             ))}
@@ -500,14 +506,14 @@ const Home = () => {
           <div className="flex flex-col gap-4 items-center justify-between m-auto w-full">
             <div className="flex flex-col md:flex-row gap-4 items-center mx-auto md:mb-0">
             {whatsapp.map((label, index) => (
-              <a href={`https://api.whatsapp.com/send?phone=549${label}`} target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-[#0022ff] text-sm sm:text-base flex items-center gap-1 font-medium transition-all ease-in-out"><span className="text-[#00bb2d] text-2xl"><FaWhatsapp /></span> {label}</a>
+              <a key={index} href={`https://api.whatsapp.com/send?phone=549${label}`} target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-[#0022ff] text-sm sm:text-base flex items-center gap-1 font-medium transition-all ease-in-out"><span className="text-[#00bb2d] text-2xl"><FaWhatsapp /></span> {label}</a>
             ))}
             {gmail.map((label, index) => (
-              <a href={`mailto:${label}`} target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-[#0022ff] text-sm sm:text-base flex items-center gap-1 font-medium transition-all ease-in-out"><span className="text-red-500 text-2xl" ><FaEnvelope /></span> {label}</a>
+              <a key={index} href={`mailto:${label}`} target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-[#0022ff] text-sm sm:text-base flex items-center gap-1 font-medium transition-all ease-in-out"><span className="text-red-500 text-2xl" ><FaEnvelope /></span> {label}</a>
             ))}
             </div>
-            {maps.map(map => (
-              <a href={map.url} target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-[#0022ff] text-sm sm:text-base sm:text-start text-center flex items-center gap-1 font-medium transition-all ease-in-out"><span className="text-[#0022FF] text-2xl"><FaMapMarkerAlt /></span> {map.text}</a>
+            {maps.map((map, index) => (
+              <a key={index} href={map.url} target="_blank" rel="noopener noreferrer" className="ml-2 hover:text-[#0022ff] text-sm sm:text-base sm:text-start text-center flex items-center gap-1 font-medium transition-all ease-in-out"><span className="text-[#0022FF] text-2xl"><FaMapMarkerAlt /></span> {map.text}</a>
             ))}
           </div>
           <div className="flex flex-wrap w-full items-center justify-end mt-10">

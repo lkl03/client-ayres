@@ -1,5 +1,5 @@
 import { useState } from "react";
-import withAuth from "../components/withAuth";
+import useWithAuth from "../components/useWithAuth";
 import useFirebaseData from "../hooks/useFirebaseData";
 
 import { dash1, dash2, dash3, dash4, dash5, dash6, dash7, dash8, dash9, dash10, dash11, dash12, dash13, dash14 } from "../assets";
@@ -9,44 +9,36 @@ import { getFirestore, query, addDoc, collection, deleteDoc, doc } from "firebas
 
 const Dashboard = () => {
 
+    const [user, AuthComponent] = useWithAuth(); // Use the custom hook
+    
     const db = getFirestore(app);
-
+    
     const addCategory = async (event) => {
         event.preventDefault();
       
         const { name, description, image, servicios } = event.target.elements;
-        const db = getFirestore();
       
         // Split the 'servicios' input string into an array, trimming any whitespace
         const serviciosArray = servicios.value.split(',').map((service) => {
-          const [serviceName, valorM2] = service.split(':').map((item) => item.trim());
-          return {
-            servicio: serviceName,
-            valorM2: parseFloat(valorM2),
-          };
+            const [serviceName, valorM2] = service.split(':').map((item) => item.trim());
+            return {
+                servicio: serviceName,
+                valorM2: parseFloat(valorM2),
+            };
         });
       
         await addDoc(collection(db, 'cotizador'), {
-          name: name.value,
-          description: description.value,
-          image: image.value,
-          servicios: serviciosArray,
+            name: name.value,
+            description: description.value,
+            image: image.value,
+            servicios: serviciosArray,
         });
       
         // Reset form
         event.target.reset();
     };
-
+    
     const [cotizadorData, updateCotizadorData] = useFirebaseData("cotizador");
-
-    // Add this function to handle deletion of documents
-    const handleDelete = async (id) => {
-        if (window.confirm("Seguro queres eliminar esta categoría? Esto no se puede deshacer.")) {
-            await deleteDoc(doc(db, "cotizador", id));
-            updateCotizadorData();
-        }
-    };
-
     const [descData, updateDescData] = useFirebaseData("desc");
     const [gmailData, updateGmailData] = useFirebaseData("gmail");
     const [instagramData, updateInstagramData] = useFirebaseData("instagram");
@@ -60,17 +52,25 @@ const Dashboard = () => {
     const [whatsappButtonData, updateWhatsappButtonData] = useFirebaseData("whatsappbutton");
     const [abonosData, updateAbonosData] = useFirebaseData("abonos");
     const [inputValues, setInputValues] = useState({});
-
+    
+    // Add this function to handle deletion of documents
+    const handleDelete = async (id) => {
+        if (window.confirm("Seguro queres eliminar esta categoría? Esto no se puede deshacer.")) {
+            await deleteDoc(doc(db, "cotizador", id));
+            updateCotizadorData();
+        }
+    };
+    
     const handleChange = (id, field, value) => {
         setInputValues({ ...inputValues, [`${id}-${field}`]: value });
     };
-
+    
     const handleSave = async (id, field, updateFn) => {
         if (inputValues[`${id}-${field}`] !== undefined) {
             await updateFn(id, { [field]: inputValues[`${id}-${field}`] });
         }
     };
-
+    
     if (!cotizadorData || !descData || !gmailData || !instagramData || !mapsData || !imagesData || !alternateImagesData || !quienesSomosData || !serviciosData || !textsData || !whatsappData || !whatsappButtonData || !abonosData) {
         return <div>Loading...</div>;
     }
@@ -102,6 +102,12 @@ const Dashboard = () => {
     const handleLogout = () => {
         auth.signOut();
     };
+
+        
+
+    if (!user) {
+        return AuthComponent;
+    }
 
     return (
         <>
@@ -222,4 +228,4 @@ const Dashboard = () => {
     );
 };
 
-export default withAuth(Dashboard);
+export default Dashboard;

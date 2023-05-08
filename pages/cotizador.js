@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 
 import { useForm, ValidationError } from '@formspree/react';
 
-const cotizador = () => {
+const Cotizador = () => {
     const categories = useFirebaseCollection("cotizador");
     const [selectedService, setSelectedService] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -53,8 +53,14 @@ const cotizador = () => {
     return (
         <div className="min-h-screen flex flex-col bg-cover bg-center md:bg-fixed" style={{ backgroundImage: `url(${heroimg.src})` }}>
             <Head>
-                <title>My Website</title>
-                <link rel="icon" href="/favicon.ico" />
+                <title>Ayres</title>
+                <link rel="icon" href="/icon.ico" />
+                <meta charSet="UTF-8" />
+                <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta name="description" content="Servicios y materiales de construcción en San Juan" />
+                <meta name="keywords" content="Construcción, corralón, San Juan, materiales, cotización, presupuesto" />
+                <meta name="theme-color" content="#151515" />
             </Head>
 
             <Navbar />
@@ -257,4 +263,4 @@ const cotizador = () => {
     );
 };
 
-export default cotizador;
+export default Cotizador;
