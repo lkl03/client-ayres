@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { logonav, logonavalt } from "../assets";
+import Link from "next/link";
 
 function Navbar() {
   const [showNavbar, setShowNavbar] = useState(false);
@@ -26,11 +27,13 @@ function Navbar() {
       } fixed w-full top-0 left-0 z-50 flex items-center justify-between p-4 background`}
     >
       <div className="flex items-center">
+        <Link href='/'>
         <img
           src={logonav.src}
           alt="Logo"
           className="md:w-[250px] w-[175px] h-auto md:ml-10"
         />
+        </Link>
       </div>
       <div className="flex items-center">
         <img
